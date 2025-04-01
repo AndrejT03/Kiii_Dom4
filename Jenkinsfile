@@ -4,13 +4,23 @@ node {
         checkout scm
     }
     stage('Build image') {
-       app = docker.build("andrejt03/kiii-dom4")
+        when {
+            branch 'dev'
+        }
+        steps {
+            app = docker.build("andrejt03/kiii-dom4")
+        }
     }
-    stage('Push image') {   
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+    stage('Push image') {
+        when {
+            branch 'dev'
+        }
+        steps {
+            docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("${env.BRANCH_NAME}-${env.BUILD_NUMBER}")
             app.push("${env.BRANCH_NAME}-latest")
             // signal the orchestrator that there is a new version
+            }
         }
     }
 }
