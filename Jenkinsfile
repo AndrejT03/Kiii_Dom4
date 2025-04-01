@@ -7,7 +7,7 @@ node {
        app = docker.build("andrejt03/kiii-dom4")
     }
     stage('Push image') {   
-        docker.withRegistry('https://registry.hub.docker.com', 'andrejt03') {
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("${env.BRANCH_NAME}-${env.BUILD_NUMBER}")
             app.push("${env.BRANCH_NAME}-latest")
             // signal the orchestrator that there is a new version
